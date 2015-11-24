@@ -9,37 +9,77 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <cstdlib>
+#include <cstdio>
+#include <ostream>
+
+
+using namespace std;
+
+vector<string> names;
+vector<int> score;
+
+
 
 int main() {
-  std::vector<std::string> names;
-  std::vector<int> score;
 
-  std::ifstream is("../test.csv");
+
+  ifstream is("../test.csv");
 
   if (is.bad()) return 1;
 
-  // store the line here
+  // store the line here in a character ARRAY called buffer.
   char buffer[2048];
 
   // loop over lines
+  // whilst you haven't encountered the end of file (eof)
   while (!is.eof()) {
+	  // take in the next line and store it in the variable 'buffer'.
+	  // here the getline is using 2 arguments getline (name of variable, size of stream taken in). A 3rd argument would have specified a custom delimiter)
     is.getline(buffer, sizeof(buffer));
 
     // loop over columns
+	// *b is a pointer to the first VALUE (not address) of the ARRAY buffer.
+	// b is set OUTSIDE of the 'for' loop, so scope is bigger than e.
     char *b = buffer;
     for (int col = 0; ; ++col) {
+		
+		// also, e has local scope in the for loop, b is outside.
+		// value of e is b (an address)
       char *e = b;
+
+	
+	  // As long as the VALUE of e isn't zero or a comma, increase e itself by 1.
       while (*e != 0 && *e != ',') ++e;
 
       // now b -> e contains the chars in a column
       if (col == 0) {
+		  //This command appends the characters between b and e to the end of names or score, depending on the column.
         names.emplace_back(b, e);
       } else if (col == 1) {
         score.push_back(std::atoi(b));
       }
 
       if (*e != ',') break;
+	  //does this line move b beyond the comma to the next column? i.e. the next start point?
       b = e + 1;
     }
   }
+
+  //Trying to get names printed to the screen.
+  //finally got it, but with warnings.
+  
+  for (int i = 0; i < score.size(); i++)
+  {
+	  cout << names[i].data() << " scored " << score[i] << " in scrabble today." << endl;
+  }
+  
+
+  
+  cout << "Press Enter to finish..." << endl;
+  cin.ignore(10, '\n');
+
+  return 0;
+
+
 }
