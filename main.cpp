@@ -54,29 +54,31 @@ int main() {
 
       // now b -> e contains the chars in a column
       if (col == 0) {
-		  //This command appends the characters between b and e to the end of names or score, depending on the column.
+		 //This command appends the characters between b and e, as a string, to the end of names.
         names.emplace_back(b, e);
       } else if (col == 1) {
-        score.push_back(std::atoi(b));
+		//This commant appends the characters between b and e, as an integer, to the end of score.
+        score.push_back(atoi(b));
       }
 
       if (*e != ',') break;
-	  //does this line move b beyond the comma to the next column? i.e. the next start point?
+	  //this line moves b beyond the comma to the next column. i.e. the next start point.
       b = e + 1;
     }
   }
 
   //Trying to get names printed to the screen.
-  //finally got it, but with warnings.
+  //finally got it, but with warnings - due to extra empty field in names. Why is that?
+  //Found extra carraige return in text file. Loop only stops when it reaches end of file, so this was making it add another entry.
   
-  for (int i = 0; i < score.size(); i++)
+  for (int i = 0; i < names.size(); i++)
   {
 	  cout << names[i].data() << " scored " << score[i] << " in scrabble today." << endl;
   }
   
 
   
-  cout << "Press Enter to finish..." << endl;
+  cout << endl << "Press Enter to finish..." << endl;
   cin.ignore(10, '\n');
 
   return 0;
